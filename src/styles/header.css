@@ -1,0 +1,14 @@
+@tailwind utilities;
+
+
+li:hover .icon {
+    filter: brightness(2) invert(0.9) ; 
+    transition: all 0.3s ease-in-out;
+}
+
+@layer utilities {
+    .dark li:hover .icon {
+        filter: brightness(1) invert(0.9) ; 
+        transition: all 0.3s ease-in-out;
+    }
+}
