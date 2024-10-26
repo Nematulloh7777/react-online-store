@@ -1,7 +1,7 @@
 import DetailsCard from "../pages/DetailsCard";
 import Favorites from "../pages/Favorites";
 import Home from "../pages/Home";
-import NotFoundPage from "../pages/notFoundPage";
+import NotFoundPage from "../pages/NotFoundPage";
 
 export const allRoutes = [
     {path: '/', component: Home},
