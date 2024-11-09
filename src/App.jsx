@@ -4,21 +4,33 @@ import AppRouter from './components/AppRouter';
 import Drawer from './components/UI/Drawer/Drawer';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeDrawer, openDrawer } from './redux/slices/drawerSlice';
+import { useLocation } from 'react-router-dom';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 const App = () => {
-  const dispatch = useDispatch()
-  const drawerOpen = useSelector(state => state.drawer.isOpen)
+  const dispatch = useDispatch();
+  const drawerOpen = useSelector((state) => state.drawer.isOpen);
+  const location = useLocation();
+
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
 
   return (
-    <div className="bg-white dark:bg-[#0f172a] rounded-[25px] mb-10 w-[85%] m-auto mt-14 shadow-lg shadow-white/75">
-       <Drawer drawerClose={() => dispatch(closeDrawer())} isOpen={drawerOpen} />
+    <>
+      {isAuthPage ? (
 
-       <Header drawerOpen={() => dispatch(openDrawer())}/>
+        location.pathname === '/login' ? <Login /> : <Register />
+      ) : (
+        <div className="bg-white dark:bg-[#0f172a] rounded-[25px] mb-10 w-[85%] m-auto mt-14 shadow-lg shadow-white/75">
+          <Drawer drawerClose={() => dispatch(closeDrawer())} isOpen={drawerOpen} />
+          <Header drawerOpen={() => dispatch(openDrawer())} />
 
-       <div className="p-12">
-          <AppRouter />
-       </div>
-    </div>
+          <div className="p-12">
+            <AppRouter />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

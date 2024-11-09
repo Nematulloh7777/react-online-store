@@ -1,14 +1,19 @@
 import React from 'react';
 import { useDispatch } from 'react-redux'
 import { clickOrderId } from '../redux/slices/cartSlice';
+import { useNavigate } from 'react-router-dom';
 
-
-const InfoBlock = ({title, description, imageUrl, isBtnBack, drawerClose}) => {
+const InfoBlock = ({title, description, imageUrl, isBtnBack, drawerClose, isNavigateHome}) => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const isButtonBack = () => {
-        drawerClose()
-        dispatch(clickOrderId(null))
+        if (isNavigateHome){
+            navigate('/')
+        } else {
+            drawerClose()
+            dispatch(clickOrderId(null))
+        }
     }
 
     // setTimeout(() => {

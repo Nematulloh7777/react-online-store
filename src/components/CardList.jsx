@@ -1,17 +1,50 @@
-import React from 'react';
 import Card from './Card';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import Error from './Error';
+import {
+    useFetchFavoritesQuery,
+    useAddToFavoritesMutation,
+    useRemoveFromFavoritesMutation
+} from '../redux/slices/api/apiProductsSlice';
 
 const CardList = ({ items, isLoading, text, error, errorText }) => {
     const [animationParent] = useAutoAnimate();
+    const { data: favoritesData = [], isLoading: isFavoritesLoading } = useFetchFavoritesQuery();
+    const [addToFavorites] = useAddToFavoritesMutation();
+    const [removeFromFavorites] = useRemoveFromFavoritesMutation();
+
+    const favorites = favoritesData.reduce((acc, item) => {
+        acc[item.parentId] = item.id;
+        return acc;
+    }, {});
+
     const skeletonArray = new Array(8).fill(0);
+
+    const toggleFavorite = async (item) => {
+        const itemId = item.parentId || item.id;
+
+        try {
+            if (favorites[itemId]) {
+                await removeFromFavorites(favorites[itemId]);
+            } else {
+                await addToFavorites({
+                    id: itemId,
+                    parentId: itemId,
+                    title: item.title,
+                    price: item.price,
+                    imageUrl: item.imageUrl,
+                });
+            }
+        } catch (error) {
+            console.error("Ошибка при обновлении избранного:", error);
+        }
+    };
 
     return (
         <div className='grid grid-cols-4 gap-5' ref={animationParent} >
             {error ? (
                 <Error errorText={errorText} />
-            ) : isLoading ? (
+            ) : isLoading || isFavoritesLoading ? (
                 skeletonArray.map((_, index) => (
                     <div key={index} className="animate-pulse border rounded-3xl p-8 border-slate-200">
                         <div className="bg-gray-300 h-40 mb-4 rounded-xl"></div>
@@ -24,10 +57,18 @@ const CardList = ({ items, isLoading, text, error, errorText }) => {
                     </div>
                 ))
             ) : (
-                
                 items.length > 0 ? (
                     items.map(item => (
-                        <Card key={item.id} {...item} text={text} />
+                        <Card
+                            key={item.parentId || item.id}
+                            id={item.parentId || item.id} 
+                            imageUrl={item.imageUrl}
+                            title={item.title}
+                            price={item.price}
+                            isFavorite={!!favorites[item.parentId || item.id]}
+                            onToggleFavorite={() => toggleFavorite(item)}
+                            text={text}
+                        />
                     ))
                 ) : (
                     <div className="col-span-4 flex flex-col items-center">

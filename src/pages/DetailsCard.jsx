@@ -1,40 +1,83 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux'
-import { ArrowLeft } from 'lucide-react';
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { ArrowLeft, Heart } from 'lucide-react';
 import { addProduct } from '../redux/slices/cartSlice';
 import { openDrawer } from '../redux/slices/drawerSlice';
+import { useGetProductByIdQuery } from '../redux/slices/api/apiProductsSlice';
+import {
+    useFetchFavoritesQuery,
+    useAddToFavoritesMutation,
+    useRemoveFromFavoritesMutation
+} from '../redux/slices/api/apiProductsSlice';
+import Loader from '../components/UI/Loader/Loader';
 
 const DetailsCard = () => {
-    const { id } = useParams();
+    const { id } = useParams()
+    const {data, error, isLoading} = useGetProductByIdQuery(id)
+    const { data: favoritesData = [] } = useFetchFavoritesQuery()
+    const [addToFavorites] = useAddToFavoritesMutation()
+    const [removeFromFavorites] = useRemoveFromFavoritesMutation()
+
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const items = useSelector(state => state.products.items)
-    const product = items.find(item => item.id === Number(id))
 
     const productInCart = useSelector(state => state.cart.items)
-    
     const findProductInCart = productInCart.find(item => item.id === Number(id))
+
+    const isFavorite = favoritesData.some(fav => fav.parentId === Number(id))
+
+    const toggleFavorite = async () => {
+        try {
+            if (isFavorite) {
+                const favorite = favoritesData.find(fav => fav.parentId === Number(id))
+                if (favorite) await removeFromFavorites(favorite.id);
+            } else {
+                await addToFavorites({
+                    id,
+                    parentId: Number(id),
+                    title: data?.title,
+                    price: data?.price,
+                    imageUrl: data?.imageUrl,
+                });
+            }
+        } catch (error) {
+            console.error("Ошибка при обновлении избранного:", error);
+        }
+    }
 
     return (
         <>
-            {product ? (
+            {error ? (
+                <p className='text-red-400 flex justify-center'>
+                    Product with Id {id} not found.
+                </p>
+            ) : isLoading ? (
+                <Loader />
+            ) : data ? (
                 <>
                     <div className="flex items-center gap-5 mb-10" >
-                        <ArrowLeft onClick={() => navigate(`/`)} className="text-slate-400 cursor-pointer transition hover:-translate-x-1 hover:text-black dark:hover:text-slate-500 dark:text-white" size={32} />
+                        <ArrowLeft onClick={() => navigate(-1)} className="text-slate-400 cursor-pointer transition hover:-translate-x-1 hover:text-black dark:hover:text-slate-500 dark:text-white" size={32} />
                         <h2 className="text-2xl font-bold dark:text-white">Подробности о товара </h2>
                     </div>
                     
                     <div className="flex justify-start ml-16 gap-14">
 
                         <div className='dark:bg-gray-200 rounded-lg p-2 h-full'>
-                            <img className='w-[250px] mix-blend-multiply' src={product?.imageUrl} alt="Product Image" />
+                            <img className='max-w-[250px] mix-blend-multiply' src={data?.imageUrl} alt="Product Image" />
                         </div>
 
-                        <div className="w-1/3">
-                            <h1 className="text-2xl mb-3 dark:text-white">{ product?.title }</h1>
-                            <span className="text-base text-slate-400 ">Код товара: { product?.id }000010 </span>
+                        <div className='ml-[-40px]' onClick={toggleFavorite}>
+                            {isFavorite ? (
+                                    <img src='/img/heart-1.svg' className='cursor-pointer max-w-12' alt="Favorite Icon" />
+                                ) : (
+                                    <Heart className='dark:text-white cursor-pointer' size={25} />
+                                )} 
+                        </div>
+
+                        <div className="w-1/2">
+                            <h1 className="text-2xl mb-3 dark:text-white">{ data?.title }</h1>
+                            <span className="text-base text-slate-400 ">Код товара: { data?.id }000010 </span>
                             
                             <div className="mt-3 border-b pb-3 mb-3" />
 
@@ -51,7 +94,7 @@ const DetailsCard = () => {
                     <div className="rounded-lg border shadow-[0px_6px_40px_-12px_rgba(0,0,0,0.3)] w-[340px] h-full p-5">
                         <span className='text-slate-400'>ЦЕНА:</span>
                         <br />
-                        <b className="text-2xl dark:text-white">{ product?.price } руб.</b>
+                        <b className="text-2xl dark:text-white">{ data?.price } руб.</b>
 
                         {findProductInCart ? (
                             <>
@@ -74,7 +117,7 @@ const DetailsCard = () => {
 
                             <button
                                 className="bg-gradient-to-br from-[#0093E9] to-[#2cc4b2] mt-7 w-full rounded-xl py-3 text-white cursor-pointer  hover:from-[#1097e6] hover:to-[#209689] transition disabled:cursor-not-allowed disabled:from-slate-400 disabled:to-slate-400 "
-                                onClick={() => dispatch(addProduct(product))}
+                                onClick={() => dispatch(addProduct(data))}
                             >
                                 <span>Добавить в корзину</span>
                             </button>
@@ -84,12 +127,7 @@ const DetailsCard = () => {
 
                 </div>
             </>
-            ) : (
-                <p className='text-red-400 flex justify-center'>
-                    Product with Id {id} not found.
-                </p>
-            )}
-
+            ) : null}
         </>
     );
 };

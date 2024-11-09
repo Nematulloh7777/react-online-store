@@ -76,7 +76,7 @@ const Header = ({drawerOpen}) => {
                             <span>Закладки</span>
                         </li>
                 </NavLink>
-                <li className='grid justify-items-center cursor-pointer gap-1 text-slate-500 hover:text-black transition-all duration-200 dark:text-slate-300  dark:hover:text-slate-400'>
+                <li onClick={() => navigate('/login')} className='grid justify-items-center cursor-pointer gap-1 text-slate-500 hover:text-black transition-all duration-200 dark:text-slate-300  dark:hover:text-slate-400'>
                     <img src="/img/profile.svg" alt="profile" className='icon' />
                     <span>Профиль</span>
                 </li>
