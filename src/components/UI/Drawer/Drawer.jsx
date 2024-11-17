@@ -56,7 +56,7 @@ const Drawer = ({ drawerClose, isOpen }) => {
 
             {/* Drawer */}
             <div
-                className={`bg-white w-96 h-full dark:bg-[#0f172a] fixed right-0 top-0 z-30 max-h-screen overflow-y-auto transition-transform duration-300 ease-in-out transform ${
+                className={`bg-white w-1/2 xl:w-96 h-full dark:bg-[#0f172a] fixed right-0 top-0 z-30 max-h-screen overflow-y-auto transition-transform duration-300 ease-in-out transform ${
                     drawerState ? 'translate-x-0' : 'translate-x-full'
                 }`}
             >

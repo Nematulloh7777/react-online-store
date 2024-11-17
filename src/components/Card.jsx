@@ -52,22 +52,23 @@ const Card = ({ id, imageUrl, title, price, text, isFavorite, onToggleFavorite }
                 onMouseLeave={() => setIsHovered(false)}
                 onClick={() => navigate(`/details-product/${id}`)}
             >
-                <img width='180' className='mix-blend-multiply' src={imageUrl} alt="все товары" />
+                <img className='mix-blend-multiply w-[130px] md:w-[155px] xl:w-[180px] ' src={imageUrl} alt="все товары" />
             </div>
 
             <p 
-                className={isHovered ? 'text-[#0093E9] transition-all' : 'hover:text-[#0093E9]'}
+                onClick={() => navigate(`/details-product/${id}`)}
+                className={`text-sm text-black xl:text-base ${isHovered ? 'text-[#0093E9] transition-all' : 'hover:text-[#0093E9]'}`}
             >
                 {text
                     ? <span dangerouslySetInnerHTML={createSafeHTML(highlightText(title, text))} />
-                    : <span onClick={() => navigate(`/details-product/${id}`)}> {title} </span>
+                    : <span>{title}</span>
                 } 
             </p>
 
             <div className='flex justify-between mt-5'>
                 <div className='flex flex-col'>
                     <span className='text-slate-400'>ЦЕНА:</span>
-                    <b>{price} руб.</b>
+                    <b className='text-black'>{price} руб.</b>
                 </div>
 
                 <img 

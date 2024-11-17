@@ -3,10 +3,11 @@ import Header from './components/Header';
 import AppRouter from './components/AppRouter';
 import Drawer from './components/UI/Drawer/Drawer';
 import { useDispatch, useSelector } from 'react-redux';
-import { closeDrawer, openDrawer } from './redux/slices/drawerSlice';
+import { closeDrawer, openDrawer, toggleDrawer } from './redux/slices/drawerSlice';
 import { useLocation } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import MobileHeader from './components/MobileHeaderDown/MobileHeader';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -21,11 +22,11 @@ const App = () => {
 
         location.pathname === '/login' ? <Login /> : <Register />
       ) : (
-        <div className="bg-white dark:bg-[#0f172a] rounded-[25px] mb-10 w-[85%] m-auto mt-14 shadow-lg shadow-white/75">
+        <div className=" bg-white dark:bg-[#0f172a] min-h-screen xl:min-h-min xl:rounded-[25px] xl:mb-10 xl:w-[85%] xl:m-auto xl:mt-14 xl:shadow-lg xl:shadow-white/75">
           <Drawer drawerClose={() => dispatch(closeDrawer())} isOpen={drawerOpen} />
           <Header drawerOpen={() => dispatch(openDrawer())} />
-
-          <div className="p-12">
+          <MobileHeader toggleDrawer={() => dispatch(toggleDrawer())} />
+          <div className="p-5 mb-16 xl:mb-0 xl:p-12">
             <AppRouter />
           </div>
         </div>

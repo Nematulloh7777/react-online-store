@@ -24,7 +24,7 @@ const Theme = () => {
     return (
         <div>
             <button onClick={toggleTheme} className='p-3 rounded-full hover:bg-gray-200 transition-all duration-300 dark:hover:bg-gray-800 hover:shadow-lg hover:shadow-cyan-500/50 '>
-                {theme === 'light' ? <Moon size={28} color='#64748b'/> : <Sun color='#ffffff' size={28}/>}
+                {theme === 'light' ? <Moon className="w-6 h-6 xl:w-8 xl:h-8 text-[#64748b]" /> : <Sun className="w-6 h-6 xl:w-8 xl:h-8 text-white" />}
             </button>
         </div>
     );

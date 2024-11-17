@@ -2,8 +2,8 @@ import React from 'react';
 
 const NotFoundPage = () => {
     return (
-        <div className='m-auto max-w-[720px] p-[100px] text-center'>
-            <h1 className='text-4xl'>
+        <div className='m-auto max-w-[720px] p-[50px] xl:p-[100px] text-center'>
+            <h1 className='text-3xl xl:text-4xl '>
                 <span className='text-5xl'>😕</span>
                 <br />
                 <b className='dark:text-white'>Ничего не найдено</b>

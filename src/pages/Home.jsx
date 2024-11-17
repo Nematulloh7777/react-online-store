@@ -73,14 +73,15 @@ const Home = () => {
 
     return (
         <div className='dark:bg-[#0f172a]'>
-            <div className='flex justify-between items-center '>
-                <h2 className='text-3xl font-bold dark:text-white'>Все товары</h2>
+            <div className='xl:flex xl:justify-between xl:items-center'>
+            {/* <div className=' flex justify-between items-center '> */}
+                <h2 className='text-3xl font-bold hidden xl:flex dark:text-white'>Все товары</h2>
 
-                <div className='flex gap-4'>
+                <div className='flex xl:flex-row flex-col gap-4'>
                     <select
                         value={sortBy}
                         onChange={onChangeSelect}
-                        className="dark:bg-[#0f172a] cursor-pointer dark:text-white py-2 px-3 border focus:border-gray-400 rounded-md outline-none"
+                        className="dark:bg-[#0f172a] w-[220px] order-2 xl:order-1 cursor-pointer dark:text-white py-2 px-3 border focus:border-gray-400 rounded-md outline-none"
                     >
                         <option value="title" className='dark:text-white'>По названию</option>
                         <option value="price" className='dark:text-white'>По цене (дешевые)</option>
@@ -88,14 +89,14 @@ const Home = () => {
                     </select>
 
                     
-                    <div className='relative'>
+                    <div className='relative order-1'>
                         <img src={searchIcon} alt="search" className='absolute top-3 left-4' />
                         <input 
                             ref={inputRef}
                             value={filters.searchQuery}
                             onChange={handleInputChange}
                             placeholder='Поиск...'
-                            className="border rounded-md outline-none py-2 pl-11 pr-8 focus:border-gray-400 dark:bg-[#0f172a] dark:text-white"
+                            className="border rounded-md  outline-none w-full xl:w-auto py-2 pl-11 pr-8 focus:border-gray-400 dark:bg-[#0f172a] dark:text-white"
                         /> 
                         {filters.searchQuery && (
                             <X 
@@ -104,6 +105,7 @@ const Home = () => {
                             />
                         )}
                     </div>
+                    <h2 className='text-2xl font-bold order-3 xl:hidden dark:text-white'>Все товары</h2>
                 </div>
             </div>
 
