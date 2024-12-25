@@ -8,8 +8,8 @@ import Register from "../pages/Register";
 export const allRoutes = [
     {path: '/', component: Home},
     {path: '/favorites', component: Favorites,},
-    {path: '*', component: NotFoundPage},
     {path: '/details-product/:id', component: DetailsCard},
     {path: '/login', component: Login},
     {path: '/register', component: Register},
+    {path: '*', component: NotFoundPage},
 ]
